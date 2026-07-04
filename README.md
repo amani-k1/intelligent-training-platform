@@ -78,27 +78,35 @@ Plateforme complète de gestion de formations professionnelles avec intelligence
 ## Stack Technique
 
 **Frontend**
-- React 19 + React Router v7
-- Lazy loading + Suspense + ErrorBoundary
-- i18n FR/EN complet
-- Recharts pour les graphiques
+
+![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![React Router](https://img.shields.io/badge/React_Router-v7-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES2024-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![i18n](https://img.shields.io/badge/i18n-FR%2FEN-0088CC?style=for-the-badge&logo=google-translate&logoColor=white)
+![Recharts](https://img.shields.io/badge/Recharts-Graphiques-22B5BF?style=for-the-badge)
 
 **Backend**
-- Laravel 11 (PHP 8.3+)
-- JWT Auth (tymon/jwt-auth + lcobucci/jwt)
-- Eloquent ORM + migrations
-- Laravel DomPDF pour exports PDF
+
+![Laravel](https://img.shields.io/badge/Laravel-11-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-8.3-777BB4?style=for-the-badge&logo=php&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-Auth-000000?style=for-the-badge&logo=json-web-tokens&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-3.0-000000?style=for-the-badge&logo=flask&logoColor=white)
 
 **IA / ML**
-- scikit-learn 1.6.1 (Random Forest)
-- sentence-transformers (SBERT)
-- ChromaDB (base vectorielle persistante)
-- OpenAI GPT-4o via GitHub Models (Azure endpoint)
+
+![scikit-learn](https://img.shields.io/badge/scikit--learn-1.6.1-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o-412991?style=for-the-badge&logo=openai&logoColor=white)
+![ChromaDB](https://img.shields.io/badge/ChromaDB-Vector_DB-FF6B35?style=for-the-badge&logo=databricks&logoColor=white)
+![Hugging Face](https://img.shields.io/badge/SBERT-Embeddings-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)
 
 **Infrastructure**
-- Docker Compose (7 services)
-- Nginx (rate limiting, CORS dynamique, SSE streaming)
-- PostgreSQL 15 avec index optimisés
+
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Nginx](https://img.shields.io/badge/Nginx-Gateway-009639?style=for-the-badge&logo=nginx&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub-Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
 
 ---
 
