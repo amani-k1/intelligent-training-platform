@@ -1,0 +1,211 @@
+# ══════════════════════════════════════════════════════════════════════
+# NGINX HTTPS — BRN SMART
+# Remplacer VOTRE_DOMAINE par votre vrai domaine (ex: brnsmart.com)
+# Puis lancer : certbot --nginx -d VOTRE_DOMAINE
+# ══════════════════════════════════════════════════════════════════════
+
+limit_req_zone $binary_remote_addr zone=auth_limit:10m rate=10r/m;
+
+# ── Redirect HTTP → HTTPS ──────────────────────────────────────────────
+server {
+    listen 80;
+    server_name VOTRE_DOMAINE www.VOTRE_DOMAINE;
+    return 301 https://$host$request_uri;
+}
+
+# ── Serveur HTTPS principal ────────────────────────────────────────────
+server {
+    listen 443 ssl;
+    server_name VOTRE_DOMAINE www.VOTRE_DOMAINE;
+
+    # Certificats Let's Encrypt (générés par certbot)
+    ssl_certificate     /etc/letsencrypt/live/VOTRE_DOMAINE/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/VOTRE_DOMAINE/privkey.pem;
+
+    # Sécurité SSL recommandée
+    ssl_protocols       TLSv1.2 TLSv1.3;
+    ssl_ciphers         HIGH:!aNULL:!MD5;
+    ssl_session_cache   shared:SSL:10m;
+    ssl_session_timeout 10m;
+
+    # HSTS — force HTTPS pour 1 an
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+    proxy_connect_timeout 120s;
+    proxy_read_timeout    120s;
+    proxy_send_timeout    120s;
+
+    resolver 127.0.0.11 valid=30s;
+
+    set $cors_origin $http_origin;
+    if ($cors_origin = '') { set $cors_origin "https://VOTRE_DOMAINE"; }
+
+    # ── AUTH SERVICE → service-1 ─────────────────────────────────────
+    location ~ ^/api/auth/(.*)$ {
+        limit_req zone=auth_limit burst=5 nodelay;
+        limit_req_status 429;
+
+        proxy_hide_header Access-Control-Allow-Origin;
+        proxy_hide_header Access-Control-Allow-Methods;
+        proxy_hide_header Access-Control-Allow-Headers;
+        proxy_hide_header Access-Control-Allow-Credentials;
+
+        if ($request_method = 'OPTIONS') {
+            add_header 'Access-Control-Allow-Origin'      $cors_origin always;
+            add_header 'Access-Control-Allow-Methods'     'GET, POST, OPTIONS, PUT, DELETE, PATCH' always;
+            add_header 'Access-Control-Allow-Headers'     'Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Requested-With' always;
+            add_header 'Access-Control-Allow-Credentials' 'true' always;
+            add_header 'Access-Control-Max-Age'           1728000 always;
+            return 204;
+        }
+
+        proxy_pass http://service-1:8000/api/$1$is_args$args;
+        proxy_set_header Host              $host;
+        proxy_set_header Authorization     $http_authorization;
+        proxy_set_header X-Real-IP         $remote_addr;
+        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+        add_header 'Access-Control-Allow-Origin'      $cors_origin always;
+        add_header 'Access-Control-Allow-Methods'     'GET, POST, OPTIONS, PUT, DELETE, PATCH' always;
+        add_header 'Access-Control-Allow-Headers'     'Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Requested-With' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+    }
+
+    # ── INSCRIPTIONS → service-2 ─────────────────────────────────────
+    location ~ ^/api/inscriptions(.*)$ {
+        proxy_hide_header Access-Control-Allow-Origin;
+        proxy_hide_header Access-Control-Allow-Methods;
+        proxy_hide_header Access-Control-Allow-Headers;
+        proxy_hide_header Access-Control-Allow-Credentials;
+
+        if ($request_method = 'OPTIONS') {
+            add_header 'Access-Control-Allow-Origin'      $cors_origin always;
+            add_header 'Access-Control-Allow-Methods'     'GET, POST, OPTIONS, PUT, DELETE, PATCH' always;
+            add_header 'Access-Control-Allow-Headers'     'Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Requested-With' always;
+            add_header 'Access-Control-Allow-Credentials' 'true' always;
+            add_header 'Access-Control-Max-Age'           1728000 always;
+            return 204;
+        }
+
+        proxy_pass http://service-2:8000/api/inscriptions$1$is_args$args;
+        proxy_set_header Host              $host;
+        proxy_set_header Authorization     $http_authorization;
+        proxy_set_header X-Forwarded-Proto https;
+        add_header 'Access-Control-Allow-Origin'      $cors_origin always;
+        add_header 'Access-Control-Allow-Methods'     'GET, POST, OPTIONS, PUT, DELETE, PATCH' always;
+        add_header 'Access-Control-Allow-Headers'     'Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Requested-With' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+    }
+
+    # ── CHATBOT → service-5 (SSE streaming) ──────────────────────────
+    location ~ ^/api/chatbot/(.*)$ {
+        proxy_hide_header Access-Control-Allow-Origin;
+        proxy_hide_header Access-Control-Allow-Methods;
+        proxy_hide_header Access-Control-Allow-Headers;
+        proxy_hide_header Access-Control-Allow-Credentials;
+
+        if ($request_method = 'OPTIONS') {
+            add_header 'Access-Control-Allow-Origin'      $cors_origin always;
+            add_header 'Access-Control-Allow-Methods'     'GET, POST, OPTIONS, PUT, DELETE, PATCH' always;
+            add_header 'Access-Control-Allow-Headers'     'Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Requested-With' always;
+            add_header 'Access-Control-Allow-Credentials' 'true' always;
+            add_header 'Access-Control-Max-Age'           1728000 always;
+            return 204;
+        }
+
+        proxy_pass http://service-5-chatbot:8007/$1$is_args$args;
+        proxy_set_header Host              $host;
+        proxy_set_header Authorization     $http_authorization;
+        proxy_set_header X-Real-IP         $remote_addr;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_buffering           off;
+        proxy_cache               off;
+        proxy_read_timeout        300s;
+        chunked_transfer_encoding on;
+        add_header 'Access-Control-Allow-Origin'      $cors_origin always;
+        add_header 'Access-Control-Allow-Methods'     'GET, POST, OPTIONS, PUT, DELETE, PATCH' always;
+        add_header 'Access-Control-Allow-Headers'     'Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Requested-With' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+    }
+
+    # ── IA → service-3-ia ────────────────────────────────────────────
+    location ~ ^/api/ia/(.*)$ {
+        proxy_hide_header Access-Control-Allow-Origin;
+        proxy_hide_header Access-Control-Allow-Methods;
+        proxy_hide_header Access-Control-Allow-Headers;
+        proxy_hide_header Access-Control-Allow-Credentials;
+
+        if ($request_method = 'OPTIONS') {
+            add_header 'Access-Control-Allow-Origin'      $cors_origin always;
+            add_header 'Access-Control-Allow-Methods'     'GET, POST, OPTIONS, PUT, DELETE, PATCH' always;
+            add_header 'Access-Control-Allow-Headers'     'Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Requested-With' always;
+            add_header 'Access-Control-Allow-Credentials' 'true' always;
+            add_header 'Access-Control-Max-Age'           1728000 always;
+            return 204;
+        }
+
+        proxy_pass http://service-3-ia:5001/$1$is_args$args;
+        proxy_set_header Host              $host;
+        proxy_set_header Authorization     $http_authorization;
+        proxy_set_header X-Forwarded-Proto https;
+        add_header 'Access-Control-Allow-Origin'      $cors_origin always;
+        add_header 'Access-Control-Allow-Methods'     'GET, POST, OPTIONS, PUT, DELETE, PATCH' always;
+        add_header 'Access-Control-Allow-Headers'     'Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Requested-With' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+    }
+
+    # ── APP métier → service-2 ────────────────────────────────────────
+    location ~ ^/api/app/(.*)$ {
+        proxy_hide_header Access-Control-Allow-Origin;
+        proxy_hide_header Access-Control-Allow-Methods;
+        proxy_hide_header Access-Control-Allow-Headers;
+        proxy_hide_header Access-Control-Allow-Credentials;
+
+        if ($request_method = 'OPTIONS') {
+            add_header 'Access-Control-Allow-Origin'      $cors_origin always;
+            add_header 'Access-Control-Allow-Methods'     'GET, POST, OPTIONS, PUT, DELETE, PATCH' always;
+            add_header 'Access-Control-Allow-Headers'     'Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Requested-With' always;
+            add_header 'Access-Control-Allow-Credentials' 'true' always;
+            add_header 'Access-Control-Max-Age'           1728000 always;
+            return 204;
+        }
+
+        proxy_pass http://service-2:8000/api/$1$is_args$args;
+        proxy_set_header Host              $host;
+        proxy_set_header Authorization     $http_authorization;
+        proxy_set_header X-Real-IP         $remote_addr;
+        proxy_set_header X-Forwarded-Proto https;
+        add_header 'Access-Control-Allow-Origin'      $cors_origin always;
+        add_header 'Access-Control-Allow-Methods'     'GET, POST, OPTIONS, PUT, DELETE, PATCH' always;
+        add_header 'Access-Control-Allow-Headers'     'Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Requested-With' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+    }
+
+    # ── FALLBACK → service-1 ─────────────────────────────────────────
+    location ~ ^/api/(.*)$ {
+        proxy_hide_header Access-Control-Allow-Origin;
+        proxy_hide_header Access-Control-Allow-Methods;
+        proxy_hide_header Access-Control-Allow-Headers;
+        proxy_hide_header Access-Control-Allow-Credentials;
+
+        if ($request_method = 'OPTIONS') {
+            add_header 'Access-Control-Allow-Origin'      $cors_origin always;
+            add_header 'Access-Control-Allow-Methods'     'GET, POST, OPTIONS, PUT, DELETE, PATCH' always;
+            add_header 'Access-Control-Allow-Headers'     'Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Requested-With' always;
+            add_header 'Access-Control-Allow-Credentials' 'true' always;
+            add_header 'Access-Control-Max-Age'           1728000 always;
+            return 204;
+        }
+
+        proxy_pass http://service-1:8000/api/$1$is_args$args;
+        proxy_set_header Host              $host;
+        proxy_set_header Authorization     $http_authorization;
+        proxy_set_header X-Real-IP         $remote_addr;
+        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+        add_header 'Access-Control-Allow-Origin'      $cors_origin always;
+        add_header 'Access-Control-Allow-Methods'     'GET, POST, OPTIONS, PUT, DELETE, PATCH' always;
+        add_header 'Access-Control-Allow-Headers'     'Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Requested-With' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+    }
+}
