@@ -8,13 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('chat_sessions', function (Blueprint $table) {
-            $table->id();
-            $table->string('session_id')->index();
-            $table->string('role');        // 'user' | 'assistant'
-            $table->text('content');
-            $table->timestamp('created_at')->useCurrent();
-        });
+        if (!Schema::hasTable('chat_sessions')) {
+            Schema::create('chat_sessions', function (Blueprint $table) {
+                $table->id();
+                $table->string('session_id')->index();
+                $table->string('role');
+                $table->text('content');
+                $table->timestamp('created_at')->useCurrent();
+            });
+        }
     }
 
     public function down(): void
