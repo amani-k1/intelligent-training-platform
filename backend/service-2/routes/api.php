@@ -171,6 +171,10 @@ Route::post('/financiers/candidat/ajouter/{id}/{id_F}', [FinancierController::cl
 
 
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\ContactController;
+
+// Contact form — user must be logged in
+Route::middleware(['jwt'])->post('/contact', [ContactController::class, 'send']);
 
 // Protected routes (JWT)
 Route::middleware(['jwt'])->group(function () {

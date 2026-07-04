@@ -1,21 +1,41 @@
 ﻿import React, { useState } from 'react';
 import { useTranslation } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
+import api from '../api/axios';
 import './ContactPage.css';
 
 const ContactPage = () => {
   const { t } = useTranslation();
+  const { user } = useAuth();
+
   const [formData, setFormData] = useState({
-    fullName: '',
-    workEmail: '',
     subject: '',
     message: ''
   });
+  const [status, setStatus] = useState(null); // null | 'loading' | 'success' | 'error'
+  const [errorMsg, setErrorMsg] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Implement API call logic here later
-    alert(t('contact.success_alert'));
+    setStatus('loading');
+    setErrorMsg('');
+
+    try {
+      await api.post('contact', {
+        subject:    formData.subject,
+        message:    formData.message,
+        user_name:  user?.name  || '',
+        user_email: user?.email || '',
+      });
+      setStatus('success');
+      setFormData({ subject: '', message: '' });
+    } catch (err) {
+      setStatus('error');
+      setErrorMsg(
+        err?.response?.data?.message || 'Une erreur est survenue. Veuillez réessayer.'
+      );
+    }
   };
 
   return (
@@ -37,27 +57,43 @@ const ContactPage = () => {
             
             {/* ── Left Column: Form ── */}
             <div className="contact-form-wrapper">
+
+              {/* Message succès */}
+              {status === 'success' && (
+                <div className="contact-feedback contact-feedback--success">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="20" height="20"><polyline points="20 6 9 17 4 12"/></svg>
+                  Votre message a été envoyé au directeur. Il vous répondra par email.
+                </div>
+              )}
+
+              {/* Message erreur */}
+              {status === 'error' && (
+                <div className="contact-feedback contact-feedback--error">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="20" height="20"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  {errorMsg}
+                </div>
+              )}
+
               <form onSubmit={handleSubmit} className="contact-form">
-                
+
+                {/* Nom & Email — auto-remplis depuis le profil connecté */}
                 <div className="contact-form__row">
                   <div className="contact-field">
                     <label>{t('contact.name_label')}</label>
                     <input
                       type="text"
-                      placeholder={t('contact.name_placeholder')}
-                      value={formData.fullName}
-                      onChange={e => setFormData({...formData, fullName: e.target.value})}
-                      required
+                      value={user?.name || ''}
+                      readOnly
+                      className="contact-input--readonly"
                     />
                   </div>
                   <div className="contact-field">
                     <label>{t('contact.email_label')}</label>
                     <input
                       type="email"
-                      placeholder={t('contact.email_placeholder')}
-                      value={formData.workEmail}
-                      onChange={e => setFormData({...formData, workEmail: e.target.value})}
-                      required
+                      value={user?.email || ''}
+                      readOnly
+                      className="contact-input--readonly"
                     />
                   </div>
                 </div>
@@ -69,14 +105,14 @@ const ContactPage = () => {
                       value={formData.subject}
                       onChange={e => setFormData({...formData, subject: e.target.value})}
                       required
+                      disabled={status === 'loading'}
                     >
                       <option value="" disabled>{t('contact.subject_placeholder')}</option>
-                      <option value="sales">{t('contact.subject_sales')}</option>
-                      <option value="support">{t('contact.subject_support')}</option>
-                      <option value="partnership">{t('contact.subject_partner')}</option>
+                      <option value="Demande commerciale">{t('contact.subject_sales')}</option>
+                      <option value="Support technique">{t('contact.subject_support')}</option>
+                      <option value="Demande de partenariat">{t('contact.subject_partner')}</option>
                     </select>
-                    {/* Custom arrow for select */}
-                    <svg className="contact-select-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    <svg className="contact-select-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                   </div>
                 </div>
 
@@ -88,11 +124,21 @@ const ContactPage = () => {
                     value={formData.message}
                     onChange={e => setFormData({...formData, message: e.target.value})}
                     required
-                  ></textarea>
+                    disabled={status === 'loading'}
+                  />
                 </div>
 
-                <button type="submit" className="contact-submit-btn">
-                  {t('contact.submit')}
+                <button
+                  type="submit"
+                  className="contact-submit-btn"
+                  disabled={status === 'loading'}
+                >
+                  {status === 'loading' ? (
+                    <>
+                      <span className="contact-spinner" />
+                      Envoi en cours...
+                    </>
+                  ) : t('contact.submit')}
                 </button>
               </form>
             </div>
@@ -161,14 +207,14 @@ const ContactPage = () => {
 
           <div className="contact-page-footer__col">
             <h4>{t('contact.footer_resources')}</h4>
-            <a href="#">{t('contact.footer_support')}</a>
-            <a href="#">{t('contact.footer_faq')}</a>
+            <span className="contact-footer-link">{t('contact.footer_support')}</span>
+            <span className="contact-footer-link">{t('contact.footer_faq')}</span>
           </div>
 
           <div className="contact-page-footer__col">
             <h4>{t('contact.footer_legal')}</h4>
-            <a href="#">{t('contact.footer_privacy')}</a>
-            <a href="#">{t('contact.footer_terms')}</a>
+            <span className="contact-footer-link">{t('contact.footer_privacy')}</span>
+            <span className="contact-footer-link">{t('contact.footer_terms')}</span>
           </div>
 
           <div className="contact-page-footer__col">
