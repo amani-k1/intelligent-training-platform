@@ -1,0 +1,158 @@
+/* ── NOTIFICATIONS PAGE ── */
+.nt-page {
+  padding: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.nt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.nt-header h1 { font-size: 1.8rem; font-weight: 800; color: #1e293b; margin-bottom: 0.3rem; }
+.nt-header p { color: #64748b; font-size: 0.95rem; }
+
+.nt-tabs {
+  display: flex;
+  background: #f1f5f9;
+  padding: 0.3rem;
+  border-radius: 12px;
+}
+
+.nt-tabs button {
+  border: none;
+  background: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nt-tabs button.active {
+  background: white;
+  color: #3498db;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Notif List */
+.nt-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.nt-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #94a3b8;
+}
+
+.nt-empty i { font-size: 3rem; margin-bottom: 1rem; opacity: 0.3; }
+
+.nt-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  display: flex;
+  gap: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border-left: 5px solid transparent;
+  transition: transform 0.2s;
+}
+
+.nt-card:hover { transform: translateX(5px); }
+
+.nt-card.unread { background: #f0f9ff; }
+.nt-card.nt-type--success { border-left-color: #2ecc71; }
+.nt-card.nt-type--info { border-left-color: #3498db; }
+.nt-card.nt-type--warning { border-left-color: #f1c40f; }
+
+.nt-card-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.nt-type--success .nt-card-icon { background: #dcfce7; color: #16a34a; }
+.nt-type--info .nt-card-icon { background: #e0f2fe; color: #0ea5e9; }
+.nt-type--warning .nt-card-icon { background: #fef3c7; color: #d97706; }
+
+.nt-card-content { flex: 1; }
+
+.nt-card-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.nt-card-header h3 { font-size: 1.1rem; font-weight: 800; color: #1e293b; }
+.nt-date { font-size: 0.8rem; color: #94a3b8; font-weight: 600; }
+
+.nt-card-content p { color: #475569; font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.2rem; }
+
+.nt-card-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+
+.nt-card-actions button {
+  background: none;
+  border: 1px solid #e2e8f0;
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nt-card-actions button:hover { background: #f8fafc; border-color: #cbd5e1; color: #1e293b; }
+.nt-card-actions .nt-btn-danger:hover { background: #fee2e2; border-color: #fecaca; color: #dc2626; }
+.nt-card-actions .nt-btn-pdf { background: #e74c3c; color: white; border: none; }
+.nt-card-actions .nt-btn-pdf:hover { background: #c0392b; color: white; }
+
+/* Modal */
+.nt-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.nt-modal-content {
+  background: white;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 500px;
+  padding: 2rem;
+}
+
+.nt-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+.nt-modal-header h2 { font-size: 1.3rem; font-weight: 800; }
+.nt-modal-header button { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #94a3b8; }
+
+.nt-modal-date { font-size: 0.85rem; color: #94a3b8; margin-bottom: 1rem; font-weight: 600; }
+.nt-modal-message { padding: 1.5rem; background: #f8fafc; border-radius: 12px; line-height: 1.6; color: #1e293b; font-size: 1rem; }
+
+.nt-modal-footer { margin-top: 2rem; display: flex; justify-content: flex-end; gap: 1rem; }
+.nt-btn-close { background: #f1f5f9; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; font-weight: 700; cursor: pointer; }
+
+@media (max-width: 768px) {
+  .nt-page { padding: 1rem; }
+  .nt-header { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+  .nt-card-actions { flex-wrap: wrap; }
+}

@@ -1,0 +1,26 @@
+backend/service-5-chatbot/chroma_db/
+
+# Secrets — aucun .env ne doit être commité
+.env
+**/.env
+frontend/.env
+backend/service-5-chatbot/.env
+backend/service-1/.env
+backend/service-2/.env
+
+# Frontend
+frontend/build/
+frontend/node_modules/
+
+# Laravel
+backend/service-1/vendor/
+backend/service-2/vendor/
+
+# Python
+__pycache__/
+*.pyc
+*.pkl
+
+# OS
+.DS_Store
+Thumbs.db

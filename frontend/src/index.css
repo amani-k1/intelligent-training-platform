@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800;900&family=Raleway:wght@300;400;600;700;800;900&display=swap');
+
+/* ===== CSS VARIABLES — BRN SMART DESIGN SYSTEM ===== */
+:root {
+  --primary:       #0a8fa0;
+  /* Palette de Bleus Premium basée sur le logo */
+  --primary: #0a8fa0;          /* Le bleu principal du logo */
+  --primary-light: #48c1d0;    /* Bleu clair / Cyan */
+  --primary-dark: #076d7a;     /* Bleu foncé */
+  --primary-deep: #044a53;     /* Bleu nuit profond */
+  --accent: #ffb703;           /* Une touche d'orange pour les contrastes importants */
+  
+  --bg-main: #f4f9fa;          /* Fond très clair légèrement bleuté */
+  --text-main: #1a2e35;        /* Texte gris très foncé / bleu nuit */
+  --text-muted: #5a7d86;       /* Texte secondaire */
+  
+  --glass: rgba(255, 255, 255, 0.85);
+  --shadow: 0 8px 30px rgba(10, 143, 160, 0.12);
+  --gradient-blue: linear-gradient(135deg, var(--primary) 0%, var(--primary-deep) 100%);
+  --radius-sm:     8px;
+  --radius-md:     16px;
+  --radius-lg:     28px;
+  --transition:    all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== RESET ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Nunito', 'Raleway', sans-serif;
+  background: var(--bg);
+  color: var(--text-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* ===== UTILITY ===== */
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: 0.75rem 2rem;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+  letter-spacing: 0.3px;
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.btn-primary:active { transform: translateY(0); }
+
+.btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  border-radius: var(--radius-lg);
+  padding: 0.7rem 1.8rem;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-outline:hover {
+  background: var(--primary);
+  color: #fff;
+  transform: translateY(-2px);
+}

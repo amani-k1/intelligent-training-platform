@@ -1,0 +1,267 @@
+* {
+  box-sizing: border-box;
+}
+
+.upa-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.upa-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+}
+
+.upa-back {
+  background: #fff;
+  border: 1px solid #e0eef2;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-weight: 800;
+  color: #0a8fa0;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.upa-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.upa-btn-secondary {
+  background: #fff;
+  border: 1.5px solid #e0eef2;
+  padding: 0.5rem 0.8rem;
+  border-radius: 10px;
+  font-weight: 800;
+  color: #1a2e35;
+  cursor: pointer;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.upa-btn-danger {
+  background: #fee;
+  border: 1px solid #fcc;
+  padding: 0.5rem 0.8rem;
+  border-radius: 10px;
+  font-weight: 800;
+  color: #e05454;
+  cursor: pointer;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+/* Grid Layout */
+.upa-grid {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.upa-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+.upa-card--profile {
+  text-align: center;
+}
+
+.upa-avatar-large {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 900;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.upa-name {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 900;
+  font-size: 1.3rem;
+  margin: 0;
+  color: #1a2e35;
+}
+
+.upa-email { color: #8aa8b0; font-size: 0.85rem; margin: 0.2rem 0 0.8rem; display: block; }
+
+.upa-badge {
+  padding: 0.3rem 1rem;
+  border-radius: 20px;
+  font-weight: 900;
+  font-size: 0.65rem;
+}
+
+.upa-stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  border-top: 1px solid rgba(0,0,0,0.05);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  padding: 1rem 0;
+  margin: 1rem 0;
+}
+
+.upa-stat-item { display: flex; flex-direction: column; }
+.upa-stat-item .val { font-size: 1.1rem; font-weight: 900; color: #1a2e35; }
+.upa-stat-item .lab { font-size: 0.7rem; color: #8aa8b0; font-weight: 700; }
+
+.upa-info-list { text-align: left; display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem; }
+.upa-info-item { font-size: 0.8rem; display: flex; justify-content: space-between; }
+.upa-info-item span { color: #8aa8b0; font-weight: 600; }
+
+.upa-bio { text-align: left; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 1rem; }
+.upa-bio h4 { margin: 0 0 0.4rem; font-size: 0.85rem; color: #1a2e35; font-weight: 800; }
+.upa-bio p { font-size: 0.8rem; color: #5a7a81; line-height: 1.5; margin: 0; }
+
+/* Tabs Navigation */
+.upa-tabs-nav {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+  background: rgba(255, 255, 255, 0.4);
+  padding: 0.3rem;
+  border-radius: 12px;
+  overflow-x: auto;
+  border: 1px solid #e0eef2;
+}
+
+.upa-tab-btn {
+  background: none;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.upa-tab-btn .label { font-size: 0.8rem; font-weight: 800; color: #8aa8b0; }
+.upa-tab-btn.active { background: #0a8fa0; }
+.upa-tab-btn.active .label, .upa-tab-btn.active .icon { color: #fff; }
+
+/* Audit Mini */
+.upa-audit-mini { display: flex; flex-direction: column; gap: 0.8rem; }
+.audit-row { display: flex; gap: 1rem; font-size: 0.8rem; }
+.audit-row span { color: #8aa8b0; font-weight: 700; flex-shrink: 0; }
+
+.upa-badge-item-pro {
+  display: flex; align-items: center; gap: 0.8rem; padding: 1rem; background: #fff; border-radius: 12px; border: 1px solid #e0eef2; position: relative;
+}
+.upa-badge-item-pro .icon { font-size: 1.5rem; }
+.upa-badge-item-pro .info strong { font-size: 0.85rem; display: block; }
+.upa-badge-item-pro .info span { font-size: 0.7rem; color: #8aa8b0; }
+
+.upa-ticket-card {
+  display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #fff; border-radius: 12px; border: 1px solid #e0eef2;
+}
+
+.upa-notes-area-pro {
+  width: 100%; height: 100px; padding: 1rem; border-radius: 12px; border: 1.5px solid #e0eef2; background: #fcfdfe; outline: none; resize: none; font-size: 0.9rem;
+}
+
+.upa-card-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.upa-search-mini {
+  background: #f8fbfc;
+  border: 1px solid #e0eef2;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  width: 220px;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.upa-search-mini:focus { border-color: #0a8fa0; background: #fff; }
+
+.upa-btn-full {
+  width: 100%;
+  padding: 0.8rem;
+  background: #0a8fa0;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.upa-btn-full:hover { background: #087a89; transform: translateY(-2px); }
+
+.upa-select-mini {
+  background: #f8fbfc;
+  border: 1px solid #e0eef2;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1a2e35;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Audit Detailed */
+.upa-audit-detailed { display: flex; flex-direction: column; gap: 1rem; }
+.audit-log-item { display: flex; gap: 1rem; padding: 1rem; border-radius: 12px; border-left: 4px solid #e0eef2; background: #fff; }
+.audit-log-item--security { border-left-color: #e05454; }
+.audit-log-item--formation { border-left-color: #0a8fa0; }
+.audit-log-item--finance { border-left-color: #f1c40f; }
+.audit-log-item--badge { border-left-color: #9b59b6; }
+
+.log-icon { font-size: 1.2rem; display: flex; align-items: center; }
+.log-body .log-date { font-size: 0.7rem; color: #8aa8b0; font-weight: 700; display: block; margin-bottom: 0.2rem; }
+.log-body p { font-size: 0.85rem; margin: 0; color: #1a2e35; }
+.log-body .log-hl { font-weight: 800; color: #0a8fa0; }
+
+/* Urgent Ticket Pulse */
+.upa-ticket--urgent { border: 1.5px solid #fee; box-shadow: 0 4px 15px rgba(224, 84, 84, 0.05); }
+.pulse-alert {
+  width: 8px; height: 8px; background: #e05454; border-radius: 50%; display: inline-block;
+  animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-red {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(224, 84, 84, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(224, 84, 84, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(224, 84, 84, 0); }
+}
+
+@media (max-width: 1000px) {
+  .upa-grid { grid-template-columns: 1fr; }
+  .upa-card--profile { position: static; }
+  .upa-search-mini { width: 100%; }
+}

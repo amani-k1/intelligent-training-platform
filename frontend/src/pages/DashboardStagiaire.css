@@ -1,0 +1,193 @@
+/* ═══════════════════════════════════════
+   DashboardStagiaire.css — ANALYTICAL STYLE
+   ═══════════════════════════════════════ */
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.ds-analytical-page {
+  padding: 1.5rem;
+  background-color: #F8FAFC;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  font-family: 'Inter', 'Nunito', sans-serif;
+}
+
+/* ── HEADER ── */
+.ds-analytical-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ds-header-left h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #1E293B;
+  margin: 0;
+}
+
+.ds-header-left p {
+  color: #64748B;
+  font-size: 0.875rem;
+  margin: 0.25rem 0 0;
+}
+
+.ds-level-badge {
+  background: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #E2E8F0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.ds-level-badge span {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #94A3B8;
+  text-transform: uppercase;
+}
+
+.ds-level-badge strong {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #F59E0B;
+}
+
+/* ── KPI CARDS ── */
+.ds-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.25rem;
+}
+
+.ds-kpi-card-new {
+  padding: 1.25rem;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(226, 232, 240, 0.5);
+  transition: transform 0.2s;
+}
+
+.ds-kpi-card-new:hover {
+  transform: translateY(-2px);
+}
+
+.ds-kpi-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.ds-kpi-label-new {
+  font-size: 0.875rem;
+  font-weight: 700;
+  opacity: 0.8;
+}
+
+.ds-kpi-icon-new {
+  font-size: 1.25rem;
+}
+
+.ds-kpi-value-new {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 0.25rem 0;
+}
+
+.ds-kpi-trend-new {
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.ds-kpi-trend-new.up { color: #10B981; }
+.ds-kpi-trend-new.down { color: #EF4444; }
+
+/* ── CHARTS GRID ── */
+.ds-charts-grid-main {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+}
+
+.ds-charts-grid-bottom {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.ds-span-2 {
+  grid-column: span 1;
+}
+
+.ds-chart-container {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.ds-chart-container h3 {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #1E293B;
+  margin: 0 0 1.5rem;
+}
+
+.ds-chart-box {
+  height: 100%;
+  min-height: 250px;
+}
+
+/* ── QUICK ACTIONS ── */
+.ds-quick-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ds-action-btn-new {
+  padding: 0.85rem;
+  border-radius: 0.75rem;
+  border: 1px solid #E2E8F0;
+  background: #F8FAFC;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1E293B;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+}
+
+.ds-action-btn-new:hover {
+  background: #3B82F6;
+  color: white;
+  border-color: #3B82F6;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1200px) {
+  .ds-kpi-row { grid-template-columns: repeat(3, 1fr); }
+  .ds-charts-grid-main { grid-template-columns: 1fr; }
+  .ds-charts-grid-bottom { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  .ds-kpi-row { grid-template-columns: 1fr 1fr; }
+  .ds-charts-grid-bottom { grid-template-columns: 1fr; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

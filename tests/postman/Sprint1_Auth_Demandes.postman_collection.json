@@ -1,0 +1,542 @@
+{
+  "info": {
+    "name": "Center Formation - Sprint 1 : Auth & Demandes",
+    "description": "Tests des fonctionnalités Sprint 1 : Inscription, Login, Accepter/Refuser demandes",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_s1",
+      "value": "http://localhost:8000/api",
+      "description": "Service-1 (Auth) - URL directe"
+    },
+    {
+      "key": "base_s2",
+      "value": "http://localhost:8001/api",
+      "description": "Service-2 (Formations/Inscriptions) - URL directe"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "description": "JWT Token - rempli automatiquement après login"
+    },
+    {
+      "key": "admin_token",
+      "value": "",
+      "description": "JWT Token Admin - rempli automatiquement après login admin"
+    },
+    {
+      "key": "candidat_id",
+      "value": "1",
+      "description": "ID d'une inscription candidat existante (à ajuster)"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Inscription (Register)",
+      "item": [
+        {
+          "name": "S1-01 | Register valide (candidat)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 - Utilisateur créé', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Réponse contient les données utilisateur', function () {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('email');",
+                  "    pm.expect(json).to.have.property('name');",
+                  "    pm.expect(json).to.have.property('role');",
+                  "});",
+                  "",
+                  "pm.test('Le rôle est candidat', function () {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.role).to.eql('candidat');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ahmed Ben Ali\",\n  \"email\": \"ahmed.benali@test.com\",\n  \"password\": \"password123\",\n  \"role\": \"candidat\",\n  \"status\": \"actif\"\n}"
+            },
+            "url": "{{base_s1}}/register"
+          }
+        },
+        {
+          "name": "S1-02 | Register valide (formateur)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 - Formateur créé', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Le rôle est formateur', function () {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.role).to.eql('formateur');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sara Formateur\",\n  \"email\": \"sara.formateur@test.com\",\n  \"password\": \"password123\",\n  \"role\": \"formateur\",\n  \"status\": \"actif\"\n}"
+            },
+            "url": "{{base_s1}}/register"
+          }
+        },
+        {
+          "name": "S1-03 | Register sans email (validation)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 4xx ou erreur - email manquant', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 422, 500]);",
+                  "});",
+                  "",
+                  "pm.test('Temps de réponse < 3000ms', function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(3000);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"User Sans Email\",\n  \"password\": \"password123\",\n  \"role\": \"candidat\"\n}"
+            },
+            "url": "{{base_s1}}/register"
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Connexion (Login)",
+      "item": [
+        {
+          "name": "S1-04 | Login valide - Candidat",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 - Login réussi', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Réponse contient un token JWT', function () {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('token');",
+                  "    pm.expect(json.token).to.be.a('string').and.not.empty;",
+                  "});",
+                  "",
+                  "pm.test('Réponse contient les données utilisateur', function () {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('user');",
+                  "    pm.expect(json.user).to.have.property('email');",
+                  "});",
+                  "",
+                  "// Sauvegarder le token pour les requêtes suivantes",
+                  "const json = pm.response.json();",
+                  "if (json.token) {",
+                  "    pm.collectionVariables.set('token', json.token);",
+                  "    console.log('Token sauvegardé :', json.token.substring(0, 30) + '...');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"ahmed.benali@test.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": "{{base_s1}}/login"
+          }
+        },
+        {
+          "name": "S1-05 | Login valide - Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 - Login Admin réussi', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Token JWT présent', function () {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.token).to.be.a('string').and.not.empty;",
+                  "});",
+                  "",
+                  "pm.test('Rôle est admin', function () {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.user.role).to.eql('admin');",
+                  "});",
+                  "",
+                  "// Sauvegarder le token admin",
+                  "const json = pm.response.json();",
+                  "if (json.token) {",
+                  "    pm.collectionVariables.set('admin_token', json.token);",
+                  "    console.log('Token Admin sauvegardé');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@formation.com\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": "{{base_s1}}/login"
+          }
+        },
+        {
+          "name": "S1-06 | Login mauvais mot de passe",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401 - Accès refusé', function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});",
+                  "",
+                  "pm.test('Message erreur Unauthorized', function () {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('error');",
+                  "    pm.expect(json.error).to.eql('Unauthorized');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"ahmed.benali@test.com\",\n  \"password\": \"MAUVAIS_MOT_DE_PASSE\"\n}"
+            },
+            "url": "{{base_s1}}/login"
+          }
+        },
+        {
+          "name": "S1-07 | Login email inexistant",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401 - Email inexistant refusé', function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});",
+                  "",
+                  "pm.test('Pas de token dans la réponse', function () {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json).to.not.have.property('token');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"inconnu@inexistant.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": "{{base_s1}}/login"
+          }
+        },
+        {
+          "name": "S1-08 | Consulter profil (token valide)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 - Profil retourné', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Profil contient email et nom', function () {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('email');",
+                  "    pm.expect(json).to.have.property('name');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": "{{base_s1}}/profile"
+          }
+        },
+        {
+          "name": "S1-09 | Consulter profil sans token (sécurité)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401 - Accès refusé sans token', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([401, 403]);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": "{{base_s1}}/profile"
+          }
+        },
+        {
+          "name": "S1-10 | Logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 - Déconnexion réussie', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Message logged out', function () {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('message');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": "{{base_s1}}/logout"
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Accepter / Refuser Demandes",
+      "item": [
+        {
+          "name": "S1-11 | Liste toutes les demandes candidats",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 - Liste retournée', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Réponse est un tableau', function () {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('Temps de réponse < 3000ms', function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(3000);",
+                  "});",
+                  "",
+                  "// Sauvegarder le premier ID disponible",
+                  "const json = pm.response.json();",
+                  "if (json.length > 0) {",
+                  "    pm.collectionVariables.set('candidat_id', json[0].id);",
+                  "    console.log('ID candidat sauvegardé :', json[0].id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": "{{base_s2}}/demandes/candidats"
+          }
+        },
+        {
+          "name": "S1-12 | Accepter candidat",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 - Candidat accepté', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Message de confirmation', function () {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('message');",
+                  "    pm.expect(json.message).to.include('accepté');",
+                  "});",
+                  "",
+                  "pm.test('Statut mis à jour à accepte', function () {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.data.statut).to.eql('accepte');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": "{{base_s2}}/demandes/candidats/accepter/{{candidat_id}}"
+          }
+        },
+        {
+          "name": "S1-13 | Refuser candidat",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 - Candidat refusé', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Message de confirmation', function () {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('message');",
+                  "    pm.expect(json.message).to.include('refusé');",
+                  "});",
+                  "",
+                  "pm.test('Statut mis à jour à refuse', function () {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.data.statut).to.eql('refuse');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": "{{base_s2}}/demandes/candidats/refuser/{{candidat_id}}"
+          }
+        },
+        {
+          "name": "S1-14 | Accepter candidat ID inexistant (sécurité)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 404 - Candidat non trouvé', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([404, 500]);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": "{{base_s2}}/demandes/candidats/accepter/99999"
+          }
+        },
+        {
+          "name": "S1-15 | Liste demandes par statut (en_attente)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Réponse est un tableau', function () {",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": "{{base_s2}}/candidats/statut/en_attente"
+          }
+        }
+      ]
+    }
+  ]
+}

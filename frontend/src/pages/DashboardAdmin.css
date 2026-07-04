@@ -1,0 +1,196 @@
+/* ═══════════════════════════════════════
+   DashboardAdmin.css — ANALYTICAL STYLE
+   ═══════════════════════════════════════ */
+
+.da-analytical-page {
+  padding: 1.5rem;
+  background-color: #F8FAFC;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  font-family: 'Inter', 'Nunito', sans-serif;
+}
+
+/* ── HEADER ── */
+.da-analytical-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.da-header-left h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #1E293B;
+  margin: 0;
+}
+
+.da-header-left p {
+  color: #64748B;
+  font-size: 0.875rem;
+  margin: 0.25rem 0 0;
+}
+
+.da-month-selector {
+  background: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #E2E8F0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.da-month-selector span {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #94A3B8;
+  text-transform: uppercase;
+}
+
+.da-month-selector select {
+  border: none;
+  font-weight: 700;
+  color: #1E293B;
+  outline: none;
+  cursor: pointer;
+  background: transparent;
+}
+
+/* ── KPI CARDS ── */
+.da-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.25rem;
+}
+
+.da-kpi-card-new {
+  padding: 1.25rem;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(226, 232, 240, 0.5);
+  transition: transform 0.2s;
+}
+
+.da-kpi-card-new:hover {
+  transform: translateY(-2px);
+}
+
+.da-kpi-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.da-kpi-label-new {
+  font-size: 0.875rem;
+  font-weight: 700;
+  opacity: 0.8;
+}
+
+.da-kpi-icon-new {
+  font-size: 1.25rem;
+}
+
+.da-kpi-value-new {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 0.25rem 0;
+}
+
+.da-kpi-trend-new {
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.da-kpi-trend-new.up {
+  color: #1089b9;
+}
+
+.da-kpi-trend-new.down {
+  color: #82e8f8;
+}
+
+/* ── CHARTS GRID ── */
+.da-charts-grid-main {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+}
+
+.da-charts-grid-bottom {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.da-span-2 {
+  grid-column: span 1;
+}
+
+.da-chart-container {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.da-chart-container h3 {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #1E293B;
+  margin: 0 0 1.5rem;
+}
+
+.da-chart-box {
+  height: 100%;
+  min-height: 250px;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1200px) {
+  .da-kpi-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .da-charts-grid-main {
+    grid-template-columns: 1fr;
+  }
+
+  .da-charts-grid-bottom {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .da-kpi-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .da-charts-grid-bottom {
+    grid-template-columns: 1fr;
+  }
+
+  .da-analytical-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

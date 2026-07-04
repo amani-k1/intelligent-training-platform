@@ -1,0 +1,117 @@
+// ─── Mock data for StagiaireMesFormations ────────────────────────────────────
+
+export const DOMAINES = ['Tous', 'Intelligence Artificielle', 'Marketing', 'Développement Web', 'Management', 'Data Science'];
+
+export const MOCK_FORMATIONS = [
+  {
+    id: 'f1',
+    title: 'IA pour décideurs',
+    domaine: 'Intelligence Artificielle',
+    formateur: 'Dr. Karim Benali',
+    note: 4.8,
+    color: '#0a8fa0', /* Bleu BRN SMART principal (Teal/Cyan) */
+    image: null,
+    dateInscription: '2026-04-01',
+    status: 'en_cours',
+    progression: 65,
+    modulesTotal: 8,
+    modulesCompleted: 5,
+    nextSession: { date: '2026-05-08', time: '10:00', link: 'https://zoom.us/j/123' },
+    description: 'Comprendre les enjeux et applications de l\'IA pour la prise de décision stratégique en entreprise. Formation 100% pratique avec cas d\'usage réels.',
+    modules: [
+      { id: 1, title: 'Introduction à l\'IA', done: true, duration: '1h30' },
+      { id: 2, title: 'Machine Learning – Concepts clés', done: true, duration: '2h' },
+      { id: 3, title: 'IA & Big Data', done: true, duration: '1h45' },
+      { id: 4, title: 'Cas pratiques : Finance', done: true, duration: '2h' },
+      { id: 5, title: 'Cas pratiques : RH', done: true, duration: '1h30' },
+      { id: 6, title: 'Éthique et gouvernance IA', done: false, duration: '1h' },
+      { id: 7, title: 'Outils IA No-Code', done: false, duration: '2h30' },
+      { id: 8, title: 'Projet final & évaluation', done: false, duration: '3h' },
+    ],
+    ressources: [
+      { title: 'Slides Module 1', url: '#', type: 'pdf' },
+      { title: 'Vidéo – Intro ML', url: '#', type: 'video' },
+      { title: 'Quiz Module 3', url: '#', type: 'quiz' },
+    ],
+    evaluations: ['Quiz Modules 1-3 : passé ✅', 'Projet Final : à rendre le 20/05/2026'],
+  },
+  {
+    id: 'f2',
+    title: 'Marketing Digital Avancé',
+    domaine: 'Marketing',
+    formateur: 'Mme. Sara Idrissi',
+    note: 4.5,
+    color: '#0a8fa0', /* Couleur unifiée BRN SMART */
+    image: null,
+    dateInscription: '2026-03-15',
+    status: 'en_cours',
+    progression: 30,
+    modulesTotal: 10,
+    modulesCompleted: 3,
+    nextSession: { date: '2026-05-11', time: '15:00', link: 'https://zoom.us/j/456' },
+    description: 'Maîtrisez SEO, SEM, Social Media et Content Marketing. Apprenez à créer et piloter des campagnes digitales performantes avec des outils pros.',
+    modules: [
+      { id: 1, title: 'Fondamentaux du Digital', done: true, duration: '1h' },
+      { id: 2, title: 'SEO On-Page & Off-Page', done: true, duration: '2h30' },
+      { id: 3, title: 'Google Ads & SEM', done: true, duration: '2h' },
+      { id: 4, title: 'Facebook & Instagram Ads', done: false, duration: '2h' },
+      { id: 5, title: 'Email Marketing', done: false, duration: '1h30' },
+      { id: 6, title: 'Content Marketing & Blog', done: false, duration: '1h45' },
+      { id: 7, title: 'Analytics & KPIs', done: false, duration: '2h' },
+      { id: 8, title: 'Social Selling', done: false, duration: '1h30' },
+      { id: 9, title: 'Growth Hacking', done: false, duration: '2h' },
+      { id: 10, title: 'Projet Final', done: false, duration: '3h' },
+    ],
+    ressources: [
+      { title: 'Guide SEO 2026', url: '#', type: 'pdf' },
+      { title: 'Template Calendrier Editorial', url: '#', type: 'excel' },
+    ],
+    evaluations: ['Quiz SEO : passé ✅', 'Projet Campagne Ads : à venir'],
+  },
+  {
+    id: 'f3',
+    title: 'Développement React & Node.js',
+    domaine: 'Développement Web',
+    formateur: 'M. Amine Zouaoui',
+    note: 4.9,
+    color: '#0a8fa0', /* Couleur unifiée BRN SMART */
+    image: null,
+    dateInscription: '2026-02-10',
+    status: 'terminee',
+    progression: 100,
+    modulesTotal: 12,
+    modulesCompleted: 12,
+    nextSession: null,
+    description: 'Formation complète Full-Stack avec React, Node.js, Express et MongoDB. Déployez vos premières applications web professionnelles.',
+    modules: Array.from({length:12}, (_,i) => ({ id:i+1, title:`Module ${i+1}`, done:true, duration:'2h' })),
+    ressources: [
+      { title: 'Code source GitHub', url: '#', type: 'link' },
+      { title: 'Certificat PDF', url: '#', type: 'pdf' },
+    ],
+    evaluations: ['Tous les modules complétés ✅', 'Certificat disponible 🏆'],
+    certificat: true,
+  },
+  {
+    id: 'f4',
+    title: 'Data Science avec Python',
+    domaine: 'Data Science',
+    formateur: 'Dr. Nadia Hamdi',
+    note: 4.6,
+    color: '#0a8fa0', /* Couleur unifiée BRN SMART */
+    image: null,
+    dateInscription: '2026-05-01',
+    status: 'non_commencee',
+    progression: 0,
+    modulesTotal: 9,
+    modulesCompleted: 0,
+    nextSession: { date: '2026-05-15', time: '09:00', link: 'https://zoom.us/j/789' },
+    description: 'Pandas, NumPy, Matplotlib, Scikit-learn : les outils essentiels pour analyser et visualiser des données. Projet concret sur dataset réel.',
+    modules: Array.from({length:9}, (_,i) => ({ id:i+1, title:`Module ${i+1} – Python DS`, done:false, duration:'2h30' })),
+    ressources: [
+      { title: 'Guide démarrage Python', url: '#', type: 'pdf' },
+    ],
+    evaluations: ['Démarrage le 15 mai 2026'],
+  },
+];
+
+export const SPARKLINE_DATA = [2, 5, 3, 8, 6, 9, 7]; // heures d'apprentissage sur 7 jours
